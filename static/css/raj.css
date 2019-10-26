@@ -1,9 +1,8 @@
 .head{
-color:white;
+color:black;
 font-size:50px;
-text-align: center;
-border:underline;
-background-color;
+text-align:center;
+;
 }
 .bd{
 height:300px;
@@ -13,7 +12,7 @@ color:blue;
 background-color:yellow;
 }
 body{
-background-color:;
+background-color:white;
 }
 .hr1{
 height:5px;
@@ -30,5 +29,8 @@ padding-top:60px;
 padding-right:400px;
 font-size:25px;
 float:right;
+}
 
+.brk{
+align:center;
 }

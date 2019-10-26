@@ -1,10 +1,179 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
+    <meta charset="UTF-8">
+    <title>Monitoring</title>
+    <link rel="stylesheet" href="{% static 'css/monitor.css' %}">
+
+</head>
+<style>
+    .single_border {
+    border: 1px solid black;
+    }
+    .border_for_table {
+        border-collapse: collapse;
+        border: 1px solid black;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<script src="{% static 'js/alertify.min.js' %}"></script>
+<!-- include the style -->
+<link rel="stylesheet" href="{% static 'css/alertify.min.css' %}" />
+<!-- include a theme -->
+<link rel="stylesheet" href="{% static 'css/default.min.css' %}" />
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script type="text/javascript">
+
+//Reading local path
+function readTextFile(filePath){
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", filePath , true);
+    rawFile.send(null);
+
+    rawFile.onreadystatechange = function (){
+        if(rawFile.readyState === 4){
+            if(rawFile.status === 200 || rawFile.status == 0){
+                var allText = rawFile.responseText;
+                window.alert(allText);
+            }
+        }
+    }
+}
+
+function updateDb() {
+    $.ajax({
+        type: 'POST',
+        dataType: "json",
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        url: "get_data",
+        success: function(data)
+        {
+            var seek = data.COUNT;
+            var filePath = data.PATH;
+
+            var formData = new FormData(filePath);
+            window.alert(formData);
+
+        }
+    });
+}
+
+function filterIpAdress() {
+    var selectedIpAdress = $( "#ip_adress_list" ).val();
+    $("#selected_ip_adress_value").text(selectedIpAdress);
+    $.ajax({
+        type: 'POST',
+        url: "filter_data_with_ip_address",
+        dataType: "json",
+        data: {'selectedIpAdress': selectedIpAdress,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+
+        success: function(msg) {
+            //clear all available data in table
+            $("#main_filtered_table td").remove();
+            var filteredData = msg.record;
+            $(filteredData).each(function(index, record) {
+                var data = "<tr class='single_border'>";
+                data += "<td class='single_border'>"+record.DATE+"</td>";
+                data += "<td class='single_border'>"+record.STATUS_CODE+"</td>";
+                data += "<td class='single_border'>"+record.MEMORY+"</td>";
+                data += "<td class='single_border'>"+record.URL_LOCATION+"</td>";
+                data += "<td class='single_border'>"+record.METHOD+"</td></tr>";
+
+                $("#main_filtered_table").append(data);
+            });
+        }
+    });
+}
+
+/*
+$(document).ready(function(){
+  $.ajax({
+        type: "GET",
+        url:"onload_details",
+        success: function(data)
+        {
+            var file_path = data.FILE_PATH;
+            $("#montiring_file_path_id").text(file_path);
+        }
+        });
+
+});
+*/
+</script>
+<body>
+<form>
+    <h1 align="center" style="color:#99ffdd";>LOGANALYZER</h1></br><hr/></br>
+    <div class="moni">
+        <b><a href="/home/">To Home Page</a> </b>
+    </div>
+    <div class="moni1">
+        <b><a href="//">To Report Page</a></b>
+     </div><br><br></br>
+        <div id="monitoring-field">
+            <table align="center" cellspacing="5">
+                <tr>
+                    <td><b>Monitoring log File : </b></td>
+                    <td><p id="montiring_file_path_id">{{path}}</p> </td>
+                </tr>
+            </table>
+            <table align="center">
+                <tr>
+                     <td ><form method="post" enctype="multipart/form-data">
+                             {% csrf_token %}
+                           <p> <button type="button" onclick="updateDb()">Monitor</button></p>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+             </br>
+        </div>
+        <div>
+            <table align="center" cellspacing="5">
+                <tr>
+                    <td><b>Ip adress : </b></td>
+                    <td><select id="ip_adress_list">
+                        {% for ip_addr in ip_address %}
+                            <option value="{{ip_addr}}">{{ip_addr}}</option>
+                        {% endfor %}
+                    </select></td>
+
+                </tr>
+            </table>
+            <table align="center">
+                <tr>
+                    <td ><form method="post" enctype="multipart/form-data">
+                             {% csrf_token %}
+                           <p> <button type="button" onclick="filterIpAdress()">Refine</button></p>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <table align="center" cellspacing="5">
+                <tr>
+                    <td><b>Ip adress : </b></td>
+                    <td><b><p id="selected_ip_adress_value"></p></b> </td>
+                </tr>
+            </table>
+        </div>
+
+            <div>
+
+            <table class="border_for_table" id="main_filtered_table">
+                <tr class="single_border">
+                    <th class="single_border">DATE AND TIME</th>
+                    <th class="single_border">RESPONSE CODE</th>
+                    <th class="single_border">MEMORY</th>
+                    <th class="single_border">URL LOCATION</th>
+                    <th class="single_border">METHOD</th>
+                </tr>
+            </table>
+            </div>
+
+    </form>
 </body>
 </html>

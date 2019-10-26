@@ -6,7 +6,7 @@ class Logger(object):
     @staticmethod
     def get_logger(loglevel=logging.INFO):
         if Logger.__instnace == None:
-            Logger(loglevel)
+            Logger(loglevel) #doub
         return Logger.__instnace
 
     def __init__(self, loglevel=logging.INFO):
@@ -14,8 +14,8 @@ class Logger(object):
             raise Exception("This logger is a singleton Instance, user get_logger() static method instead")
         else:
             Logger.__instnace = self
-        self.logger = logging.getLogger("loganalyzer.log")
-        self.logger.setLevel(loglevel)
+        self.logger = logging.getLogger("loganalyzer.log") #objec created
+        self.logger.setLevel(loglevel) #level set
 
         #create console handler
         _ch = logging.StreamHandler()

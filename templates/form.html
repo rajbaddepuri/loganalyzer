@@ -13,10 +13,11 @@
 <div class="chose">
 <form method="post" enctype="multipart/form-data">
     {%  csrf_token %}
-    {{ raj.as_p }}
+    {{ form.as_p }}
     <button type="submit">analayze</button>
 </form>
-    </div>
+</div>
+{{final}}
 
 <table class="bd" border="1px">
     <tr>

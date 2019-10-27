@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class log(models.Model):
     file=models.FileField(null=True)
+    file_path = models.CharField(max_length=255,null=True)
 
 
 class log_fields(models.Model):

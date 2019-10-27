@@ -29,7 +29,7 @@ SECRET_KEY = 'hogo-h4j@_mq%gi8_-l)=47fem%@xyqnj(l^w=hds1s)ymg2(4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.170','127.0.0.1','183.83.147.110']
 
 
 # Application definition

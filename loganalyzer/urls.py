@@ -27,6 +27,8 @@ urlpatterns = [
     #path('monitor/ip_adress',views.ip_adress),
     path('monitor/filter_data_with_ip_address',views.filter_data_with_ip_address),
     path('monitor/get_data',views.get_values_view),
+    path('monitor/update_new_data',views.update_DB),
+
 ]
 
 if settings.DEBUG:

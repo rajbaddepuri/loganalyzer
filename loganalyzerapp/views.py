@@ -29,20 +29,20 @@ def form_view(request):
         #instance=raj.save(commit=False)
         log.debug("Form page validated, hence reading the selected access log file")
         log_file=request.FILES['file'] # file containg data stored log_file
-        log.debug("selected log file name " +str(log_file))
+        file_path = request.POST['file_path']
+        print(file_path)
+        log.debug("selected log file name " +str(file_path))
         fs=FileSystemStorage()
         log_file_path=fs.path(log_file.name) #file path stored
         log.debug("Log file path is : " +str(log_file_path))
-        print()
-        #insert_log_path(log_file_path)
-        # if not process_file_data(log_file.readlines()):
-        #     return HttpResponse("<h1>Not succes fully inserted</h1>")
+        insert_log_path(str(file_path))
+        if not process_file_data(log_file.readlines()):
+            return HttpResponse("<h1>Not succes fully inserted</h1>")
     return render(request,'form.html',{"form":_form})
 
 
 def get_values_view(request):
     existing_count = get_count_db()
-    print(existing_count)
     existing_file = get_log_path()
     if existing_file is None:
         log.warning("No file found in DB. Please goto Upload New tab to initiate operations")
@@ -50,8 +50,19 @@ def get_values_view(request):
 
 def monitor_view(request):
     existing_log_path = get_log_path()
+    existing_log_path = str(existing_log_path).replace("_", "\\")
     ip_address = get_ip_adress()
     return render(request,"monitor.html",{'ip_address':ip_address, 'path':existing_log_path})
+
+def update_DB(request):
+    #print(request.GET)
+    _new_data = request.GET['NEWDATA']
+    #print(type(_new_data))
+    _status = 0
+    if not process_file_data([_new_data], updated_lines=True):
+        log.warning("Unable to update new data")
+        _status = -1
+    return JsonResponse({'STATUS': _status})
 
 def filter_data_with_ip_address(requset):
     ip_add_req = requset.POST.get('selectedIpAdress')

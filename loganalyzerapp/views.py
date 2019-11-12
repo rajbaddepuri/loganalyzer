@@ -78,7 +78,17 @@ def filter_data_with_ip_address(requset):
         processed_res.append(rec_dict)
     return JsonResponse({'record':processed_res})
 
-#
+def report_view(request):
+    existing_log_path = get_log_path()
+    existing_log_path = str(existing_log_path).replace("_", "\\")
+    return render(request, "report.html", {'path': existing_log_path})
+
+def groupby_Ipadress(request):
+    group_ip_add_req = get_group_by_ip_address()
+    print([group_ip_add_req])
+    return JsonResponse({'group_IpAdress':str(group_ip_add_req)})
+
+
 # def getmonitr_path(request):
 #     existing_log_path = get_log_path()
 #     monitor_details = {

@@ -22,7 +22,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/',views.home_view),
     path('form/',views.form_view),
-    path('bye/',views.bye_view)
+    path('monitor/',views.monitor_view),
+    #path('monitor/onload_details',views.getmonitr_path),
+    #path('monitor/ip_adress',views.ip_adress),
+    path('monitor/filter_data_with_ip_address',views.filter_data_with_ip_address),
+    path('monitor/get_data',views.get_values_view),
+    path('monitor/update_new_data',views.update_DB),
+    path('report/',views.report_view),
+    path('report/groupby_Ipadress',views.groupby_Ipadress)
+
 ]
 
 if settings.DEBUG:

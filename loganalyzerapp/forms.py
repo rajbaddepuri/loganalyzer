@@ -4,5 +4,6 @@ from django import forms
 
 class log_form(forms.ModelForm):
     class Meta:
-        fields='__all__'
+        fields = '__all__'
         model=log
+
